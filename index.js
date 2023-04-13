@@ -38,12 +38,13 @@ let queryLocation = '30.58559,114.268802'
 
 let paramObj ={}
 Object.assign(paramObj,{'get_poi':getPoi},{'location':queryLocation},{'key':appkey})
-console.log(paramObj)
+// console.log(paramObj)
 // Sort the members of paramArray object in ascending order according to the ASCII code corresponding to the key
 const sortedParamArray = Object.keys(paramObj).sort().reduce((obj, key) => {
   obj[key] = paramObj[key];
   return obj;
 }, {});
+console.log(sortedParamArray)
 
 // Use the sortedParamArray to construct the queryParam string
 let queryParam = Object.keys(sortedParamArray).map(key => `${key}=${sortedParamArray[key]}`).join('&');
