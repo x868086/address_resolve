@@ -1,5 +1,5 @@
-const md5 = require('md5')
-let axios = require('axios')
+// const md5 = require('md5')
+// let axios = require('axios')
 
 // let appkey='Z3HBZ-FDL3B-WS6US-JAMB3-F6LFZ-CSFTY'
 // let SK='Tfy6ksm01lndbA80BFXW7yUFxkLHZsI'
@@ -29,12 +29,19 @@ let axios = require('axios')
 // })
 
 
+/*
+
 let appkey='Z3HBZ-FDL3B-WS6US-JAMB3-F6LFZ-CSFTY'
 let SK='Tfy6ksm01lndbA80BFXW7yUFxkLHZsI'
 let mapDomain='https://apis.map.qq.com' 
 let queryPath ='/ws/geocoder/v1?'
 let getPoi='1'
 let queryLocation = '30.58559,114.268802'
+
+
+function splicingLocation() {
+  
+}
 
 let paramObj ={}
 Object.assign(paramObj,{'get_poi':getPoi},{'location':queryLocation},{'key':appkey})
@@ -65,5 +72,37 @@ axios.get(encodedUrlQuery).then((response)=>{
 }).catch(function(error){
     console.log(error)
 })
+
+*/
+
+
+
+import { importTable, getLocation, addResolveCloud } from './utils/index.mjs'
+
+import { config } from './config/config.js'
+
+
+let tableResolveFiles = importTable()
+
+
+for (let file in tableResolveFiles) {
+  tableResolveFiles[file].map(async (item,idx,lists) => {
+    let locationStr = `${item['LATITUDE']},${item['LONGITUDE']}`
+    let localAPIUrl = getLocation(locationStr)
+
+    // API请求并发量上限每秒5次
+    let timeer = setTimeout(async() => {
+      let obj = await addResolveCloud(localAPIUrl)
+      lists[idx]['resolved']=obj
+      // console.log(obj)
+      // console.log(tableResolveFiles)
+      clearTimeout(timeer)
+    },config.durationSec)
+  })
+}
+
+
+
+
 
 

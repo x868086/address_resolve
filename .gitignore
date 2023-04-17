@@ -3,3 +3,4 @@ node_modules/
 /dist/
 logs/
 /node_modules/
+/file_items/
