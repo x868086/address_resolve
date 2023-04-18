@@ -77,7 +77,7 @@ axios.get(encodedUrlQuery).then((response)=>{
 
 
 
-import { importTable, getLocation, addResolveCloud } from './utils/index.mjs'
+import { importTable, getLocation, addResolveCloud, addStrRegex } from './utils/index.mjs'
 
 import { config } from './config/config.js'
 
@@ -86,20 +86,27 @@ let tableResolveFiles = importTable()
 
 
 for (let file in tableResolveFiles) {
-  tableResolveFiles[file].map(async (item,idx,lists) => {
+  tableResolveFiles[file].map(async (item, idx, lists) => {
     let locationStr = `${item['LATITUDE']},${item['LONGITUDE']}`
     let localAPIUrl = getLocation(locationStr)
 
     // API请求并发量上限每秒5次
-    let timeer = setTimeout(async() => {
+    let timeer = setTimeout(async () => {
       let obj = await addResolveCloud(localAPIUrl)
-      lists[idx]['resolved']=obj
+      lists[idx]['resolved'] = obj
       // console.log(obj)
       // console.log(tableResolveFiles)
       clearTimeout(timeer)
-    },config.durationSec)
+    }, config.durationSec)
   })
 }
+
+
+let addressName = '广东省深圳市南山区科技园高新南区中区华富二路12号深圳湾科技生态园1栋2单元302室';
+
+let abc = addStrRegex(addressName, config.addressRegex)
+console.log(abc)
+
 
 
 

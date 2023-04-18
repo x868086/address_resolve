@@ -67,13 +67,37 @@ function getLocation(locationStr) {
 
 function addResolveCloud(url) {
     return axios.get(url).then((response) => {
-        let {address,formatted_addresses,poi_count,pois} = response.data.result
+        let { address, formatted_addresses, poi_count, pois } = response.data.result
         return {
-            address,formatted_addresses,poi_count,pois
+            address, formatted_addresses, poi_count, pois
         }
     }).catch(function (error) {
         console.log(error)
     })
+}
+
+function addStrRegex(addStr, addRegex) {
+    let matches = addStr.match(addRegex)
+    if (matches) {
+        // const province = matches[1] || '';
+        // const city = matches[2] || '';
+        // const district = matches[3] || '';
+        // const town = matches[4] || '';
+        // const road = matches[5] || '';
+        // const number = matches[6] || '';
+        // const building = matches[7] || '';
+        // const unit = matches[8] || '';
+        // const room = matches[9] || '';
+        let addStandard = ['province', 'city', 'district', 'town', 'road', 'number', 'building', 'unit', 'room']
+        let resultArr = []
+        for (let i = 1; i <= addStandard.length; i++) {
+            let obj = { [addStandard[i]]: matches[i] }
+            resultArr.push(obj)
+        }
+        return resultArr
+    } else {
+        throw Error('地址不正确')
+    }
 }
 
 
@@ -81,6 +105,7 @@ function addResolveCloud(url) {
 export {
     importTable,
     getLocation,
-    addResolveCloud
+    addResolveCloud,
+    addStrRegex
 }
 
