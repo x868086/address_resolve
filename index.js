@@ -102,7 +102,8 @@ for (let file in tableResolveFiles) {
 }
 
 
-let addressName = '广东省深圳市南山区科技园高新南区中区华富二路12号深圳湾科技生态园1栋2单元302室';
+let addressName = '湖北省宜昌市夷陵区小溪塔街道发展大道105号';
+
 
 let abc = addStrRegex(addressName, config.addressRegex)
 console.log(abc)

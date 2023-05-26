@@ -78,6 +78,7 @@ function addResolveCloud(url) {
 
 function addStrRegex(addStr, addRegex) {
     let matches = addStr.match(addRegex)
+        matches.shift()
     if (matches) {
         // const province = matches[1] || '';
         // const city = matches[2] || '';
@@ -90,7 +91,7 @@ function addStrRegex(addStr, addRegex) {
         // const room = matches[9] || '';
         let addStandard = ['province', 'city', 'district', 'town', 'road', 'number', 'building', 'unit', 'room']
         let resultArr = []
-        for (let i = 1; i <= addStandard.length; i++) {
+        for (let i = 0; i < addStandard.length; i++) {
             let obj = { [addStandard[i]]: matches[i] }
             resultArr.push(obj)
         }
@@ -110,7 +111,7 @@ const dataArray = [
 ];
 
 function mergeAddress(dataArray) {
-    const mergedData = data.reduce((merged, current) => {
+    const mergedData = dataArray.reduce((merged, current) => {
         Object.keys(current).forEach(key => {
             if (merged.hasOwnProperty(key)) {
                 if (Array.isArray(merged[key])) {
@@ -122,6 +123,7 @@ function mergeAddress(dataArray) {
                 merged[key] = current[key];
             }
         });
+        // console.log(merged)
         return merged;
     }, {});
     console.log(mergedData)
@@ -131,6 +133,7 @@ function mergeAddress(dataArray) {
             mergedData[key] = mergedData[key].filter((value, index, self) => self.indexOf(value) === index);
         }
     });
+    console.log(mergedData)
     return mergedData
 }
 
