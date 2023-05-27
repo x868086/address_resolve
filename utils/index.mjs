@@ -9,7 +9,8 @@ set_fs(fs);
 
 import { config } from '../config/config.js'
 
-let { appkey, SK, mapDomain, queryPath, getPoi } = config
+let { appkey, SK, mapDomain, queryPath, getPoi,translatePath,translateType } = config
+
 
 // import { fileURLToPath } from 'url';
 // import { dirname } from 'path';
@@ -65,6 +66,22 @@ function getLocation(locationStr) {
 
 }
 
+
+function translateApiSig(lat,lng) {
+    let paramObj = {}
+    Object.assign(paramObj, { 'type': translateType }, { 'locations': `${lat},${lng}` }, { 'key': appkey })
+    const sortedParamArray = Object.keys(paramObj).sort().reduce((obj, key) => {
+        obj[key] = paramObj[key];
+        return obj;
+    }, {});
+    let queryParam = Object.keys(sortedParamArray).map(key => `${key}=${sortedParamArray[key]}`).join('&');
+    let strSource = `${translatePath}${queryParam}${SK}`
+    let sigStr = md5(strSource)
+    let encodedUrlQuery = encodeURI(`${mapDomain}${translatePath}${queryParam}&sig=${sigStr}`)
+    console.log(encodedUrlQuery);
+    return encodedUrlQuery    
+}
+
 function addResolveCloud(url) {
     return axios.get(url).then((response) => {
         let { address, formatted_addresses, poi_count, pois } = response.data.result
@@ -99,6 +116,20 @@ function addStrRegex(addStr, addRegex) {
     } else {
         throw Error('地址不正确')
     }
+}
+
+
+function position_translate() {
+    let encodedUrlQuery = translateApiSig('30.75498','111.34822')
+    axios.get(encodedUrlQuery).then((response) => {
+        // let { address, formatted_addresses, poi_count, pois } = response.data.result
+        // return {
+        //     address, formatted_addresses, poi_count, pois
+        // }
+        console.log(response.data.locations)
+    }).catch(function (error) {
+        console.log(error)
+    })
 }
 
 
@@ -211,6 +242,8 @@ export {
     importTable,
     getLocation,
     addResolveCloud,
-    addStrRegex
+    addStrRegex,
+    translateApiSig,
+    position_translate
 }
 

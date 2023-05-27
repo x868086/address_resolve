@@ -77,7 +77,7 @@ axios.get(encodedUrlQuery).then((response)=>{
 
 
 
-import { importTable, getLocation, addResolveCloud, addStrRegex } from './utils/index.mjs'
+import { importTable, getLocation, addResolveCloud, addStrRegex,translateApiSig,position_translate } from './utils/index.mjs'
 
 import { config } from './config/config.js'
 
@@ -94,7 +94,7 @@ for (let file in tableResolveFiles) {
     let timeer = setTimeout(async () => {
       let obj = await addResolveCloud(localAPIUrl)
       lists[idx]['resolved'] = obj
-      // console.log(obj)
+      console.log(obj)
       // console.log(tableResolveFiles)
       clearTimeout(timeer)
     }, config.durationSec)
@@ -106,11 +106,9 @@ let addressName = '湖北省宜昌市夷陵区小溪塔街道发展大道105号'
 
 
 let abc = addStrRegex(addressName, config.addressRegex)
-console.log(abc)
+// console.log(abc)
 
 
-
-
-
-
-
+// position_translate('30.75498','111.34822','3','Z3HBZ-FDL3B-WS6US-JAMB3-F6LFZ-CSFTY')
+// translateApiSig('30.75498','111.34822','3')
+position_translate()
